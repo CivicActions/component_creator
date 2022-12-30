@@ -64,9 +64,9 @@
         </div>
     {% endfor %}
         <p class="my-4 has-text-right">
-{#            <a href={{ url_for("catalogs.catalog_update", catalog_id=catalog["id"]) }}>#}
-{#                Update catalog <ion-icon name="create-outline"></ion-icon>#}
-{#            </a>#}
+            <a href={{ url_for("catalogs.catalog_update", catalog_id=catalog["id"]) }}>
+                Update catalog <ion-icon name="create-outline"></ion-icon>
+            </a>
         </p>
     </section>
 {% endblock %}

@@ -90,6 +90,7 @@ def catalog_add():
                 except db.SQLAlchemyError as exc:
                     error = f"Catalog {title} already exists: {exc}"
                 else:
+                    flash(f"Catalog {title} created.", "message")
                     return redirect(
                         url_for("catalogs.catalog_view", catalog_id=catalog.id)
                     )
@@ -106,27 +107,19 @@ def catalog_add():
 
 @bp.route("/<int:catalog_id>", methods=["GET"])
 def catalog_view(catalog_id: int):
-    catalog_data = db.session.execute(
-        db.select(Catalog).filter_by(id=catalog_id)
-    ).first()
-    catalog = CatalogModel.from_json(catalog_data[0].filename)
+    catalog_data = Catalog.query.get_or_404(catalog_id)
+    catalog = CatalogModel.from_json(catalog_data.filename)
     metadata = catalog.metadata
     groups = catalog.get_groups()
     return render_template(
-        "catalog.html",
-        metadata=metadata,
-        groups=groups,
-        catalog=catalog_data,
+        "catalog.html", metadata=metadata, groups=groups, catalog=catalog_data
     )
 
 
 @bp.route("/<int:catalog_id>/update", methods=["GET", "POST"])
 def catalog_update(catalog_id: int):
     form = UpdateCatalogForm()
-    catalog = db.session.execute(db.select(Catalog).filter_by(id=catalog_id)).first()
-
-    if catalog is None:
-        abort(404, f"Catalog ID {catalog_id} doesn't exist")
+    catalog = Catalog.query.get_or_404(catalog_id)
 
     if request.method == "POST":
         error = None
@@ -135,19 +128,31 @@ def catalog_update(catalog_id: int):
             catalog.description = request.form["description"]
 
             try:
+                db.session.add(catalog)
                 db.session.commit()
             except db.IntegrityError:
                 error = f"Catalog {catalog_id} update failed."
             else:
-                return redirect(url_for("catalogs.catalog_view", id=catalog_id))
+                flash(f"Catalog {catalog.title} has been updated.")
+                return redirect(url_for("catalogs.catalog_view", catalog_id=catalog_id))
 
         flash(error)
 
     form.name.data = catalog.title
     form.description.data = catalog.description
     return render_template(
-        "catalogs/catalog_update_form.html",
+        "catalog_update_form.html",
         form=form,
         title="Update Catalog",
         catalog=catalog,
     )
+
+
+@bp.route("/<int:catalog_id>/delete", methods=["GET"])
+def catalog_delete(catalog_id: int):
+    catalog = Catalog.query.get_or_404(catalog_id)
+    db.session.delete(catalog)
+    db.session.commit()
+    Path(catalog.filename).unlink()
+    flash(f"Catalog {catalog.title} has been deleted.")
+    return redirect((url_for("catalogs.catalogs_list")))
