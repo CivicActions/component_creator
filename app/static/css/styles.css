@@ -1,0 +1,65 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+#main {
+  min-height: calc(100vh - 90px);
+}
+
+footer {
+  height: 75px;
+}
+
+ul.bulletless {
+  list-style: none;
+}
+
+.desc-0 {
+  margin-left: 1em;
+}
+
+.desc-1 {
+  margin-left: 1.5em;
+}
+
+.desc-6 {
+  margin-left: 2em;
+}
+
+.desc-7 {
+  margin-left: 2.5em;
+}
+
+.desc-8 {
+  margin-left: 3em;
+}
+
+.desc-9 {
+  margin-left: 3.5em;
+}
+
+.desc-10 {
+  margin-left: 4em;
+}
+
+.desc-11 {
+  margin-left: 4.5em;
+}
+
+.desc-12 {
+  margin-left: 5em;
+}
+
+#accordion .accordion-header:hover {
+  cursor: pointer;
+}
+#accordion .accordion-content {
+  max-height: 0;
+  transition: max-height 1s ease-out;
+  overflow: hidden;
+  padding: 0;
+}
+#accordion .accordion-content-transition {
+  max-height: 1500px;
+  transition: max-height 1s ease-in;
+  padding: inherit;
+}
+
+/*# sourceMappingURL=styles.css.map */

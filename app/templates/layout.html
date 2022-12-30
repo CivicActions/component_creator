@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+    <head>
+    {% block head %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}{% endblock %} | Component Creator</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    {% endblock %}
+    </head>
+    <body>
+        <div id="main" class="container">
+            <header class="mb-2">
+                {% include "navbar.html" %}
+            </header>
+            {% block breadcrumbs %}{% endblock %}
+            {% for key, message in get_flashed_messages(with_categories=True) %}
+                <div class="flash has-text-white notification has-text-centered m-1
+                {% if key == "message" %}has-background-success-dark
+                {% elif key == "info" %}has-background-info-dark
+                {%  elif key == "warning" %}has-background-warning-dark
+                {% else %}has-background-danger-dark
+                {% endif %}
+                ">
+                    {{  message }}
+                </div>
+            {% endfor %}
+            <section class="content p-2">
+                {% block content %}{% endblock %}
+            </section>
+        </div>
+        <div class="container">
+            {% include "footer.html" %}
+        </div>
+        {% block scripts %}
+            <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ component["name"] }}{% endblock %}
+
+{% block breadcrumbs %}
+<nav class="breadcrumb has-arrow-separator m-4" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href={{ url_for("components.component_list") }}>Components</a></li>
+    <li class="is-active"><a href="#" aria-current="page">{{ component["name"] }}</a></li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+    <h1 class="title">{{ component["name"] }}</h1>
+    <p>{{ component["description"] }}</p>
+    <p>
+        <a href={{ url_for("components.file_download", filename=filename) }} download={{ filename }}>
+            Download file <ion-icon name="download-outline"></ion-icon>
+        </a>
+    </p>
+    <section>
+    component display
+    </section>
+    <p>
+        <a href={{ url_for("components.component_add_control", component_id=component["id"]) }}>Add a Control</a>
+    </p>
+{% endblock %}
