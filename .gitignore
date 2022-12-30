@@ -133,3 +133,4 @@ dmypy.json
 
 # Jetbrains project files
 .idea
+app/files/catalogs
