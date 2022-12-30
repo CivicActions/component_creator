@@ -37,3 +37,16 @@ def test_catalog_view(test_client, init_database):
     assert b"SR: Supply Chain Risk Management" in response.data
     assert b"Supply Chain Risk Management Plan" in response.data
     assert b"Establish SCRM Team" in response.data
+
+
+def test_catalog_update_page(test_client, init_database):
+    """
+    GIVEN a Flask application
+    WHEN the '/catalogs/1/update' page is requested (GET)
+    THEN check the response is valid
+    """
+    response = test_client.get("/catalogs/1/update")
+    assert response.status_code == 200
+    assert b"Update Catalog" in response.data
+    assert b"Test Catalog" in response.data
+    assert b"This is the description" in response.data
