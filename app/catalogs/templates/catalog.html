@@ -34,24 +34,24 @@
                     <ul>
                     {% for control in group["controls"] %}
                         <li>
-{#                            <a href={{ url_for(#}
-{#                                "catalogs.control_view",#}
-{#                                catalog_id=catalog["id"],#}
-{#                                control_id=control["control_id"]#}
-{#                            ) }}>#}
+                            <a href={{ url_for(
+                                "catalogs.control_view",
+                                catalog_id=catalog["id"],
+                                control_id=control["control_id"]
+                            ) }}>
                                 <b>{{ control["control_id"]|upper }}:</b> {{ control["title"] }}
-{#                            </a>#}
+                            </a>
                             {% if "enhancements" in control %}
                                 <ul>
                                     {% for enhancement in control["enhancements"] %}
                                         <li>
-{#                                            <a href={{ url_for(#}
-{#                                                "catalogs.control_view",#}
-{#                                                catalog_id=catalog["id"],#}
-{#                                                control_id=enhancement["control_id"]#}
-{#                                            ) }}>#}
+                                            <a href={{ url_for(
+                                                "catalogs.control_view",
+                                                catalog_id=catalog["id"],
+                                                control_id=enhancement["control_id"]
+                                            ) }}>
                                                 <b>{{ enhancement["control_id"]|upper }}:</b> {{ enhancement["title"] }}
-{#                                            </a>#}
+                                            </a>
                                         </li>
                                     {% endfor %}
                                 </ul>

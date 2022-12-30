@@ -156,3 +156,25 @@ def catalog_delete(catalog_id: int):
     Path(catalog.filename).unlink()
     flash(f"Catalog {catalog.title} has been deleted.")
     return redirect((url_for("catalogs.catalogs_list")))
+
+
+@bp.route("/<int:catalog_id>/control/<string:control_id>", methods=["GET"])
+def control_view(catalog_id: int, control_id: str):
+    catalog_data = Catalog.query.get_or_404(catalog_id)
+    catalog = CatalogModel.from_json(catalog_data.filename)
+    group = catalog.get_group(control_id)
+    control = catalog.get_control(control_id)
+    guidance = control.guidance
+    parameters = control.parameters
+    statement = control.statement
+    statements = replace_odps(statement, parameters)
+    links = get_control_links(control.links, catalog.back_matter)
+    return render_template(
+        "control.html",
+        control=control,
+        links=links,
+        statement=statements,
+        catalog=catalog_data,
+        guidance=guidance,
+        group=group,
+    )
