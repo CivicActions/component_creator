@@ -16,10 +16,35 @@ The application's dependencies and virtual environments are managed using [Pytho
 ### Set up
 
 - Clone the repe
-- Change directory into the repo: `cd component_editor`
+- Change directory into the repo: `cd component_creator`
 - Run `poetry install` to install the project dependencies.
-- Instantiate the database by running `poetry run flask --app app init-db`
-- Run the application by running `poetry run flask --app app run`
+- Run the application by running `poetry run flask --app app run`,
+
+### Running test
+
+#### With Poetry
+
+To run tests,
+```shell
+poetry run python -m pytest
+```
+
+To run tests with coverage,
+```shell
+poetry run coverage run -m pytest && poetry run coverage report -m
+```
+
+#### Without Poetry
+
+To run tests,
+```shell
+python -m pytest
+```
+
+To run tests with coverage,
+```shell
+coverage run -m pytest && coverage report -m
+```
 
 ## Catalogs
 
@@ -38,3 +63,18 @@ menu and uploading the file. Once you have uploaded the file you will be redirec
 show information about the catalog including a list of Controls.
 
 All Catalogs imported into the system will be listed on the `/catalogs` page available from the main menu.
+
+
+## Major Contributors
+
+* **Tom Camp** - [Tom-Camp](https://github.com/Tom-Camp)
+
+## License
+
+This project is licensed under the GNU General Public License version 3 or any later version - see the LICENSE file for details. Some portions of this code are dedicated to the public domain under the terms of the Creative Commons Zero v1.0 Universal.
+
+SPDX-License-Identifier: `GPL-3.0-or-later`
+
+## Copyright
+
+Copyright 2019-2021 CivicActions, Inc.
