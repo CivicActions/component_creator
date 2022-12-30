@@ -23,9 +23,10 @@ class Config:
 
 
 class TestConfig:
+    INSTANCE_PATH = os.path.join(basedir, "instance")
     SECRET_KEY = os.getenv("SECRET_KEY")
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI") or "sqlite:///" + os.path.join(
-        basedir, "testing.db"
+        INSTANCE_PATH, "testing.db"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # Enable the TESTING flag to disable the error catching during request handling
