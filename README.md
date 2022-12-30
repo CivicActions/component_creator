@@ -18,6 +18,7 @@ The application's dependencies and virtual environments are managed using [Pytho
 - Clone the repe
 - Change directory into the repo: `cd component_creator`
 - Run `poetry install` to install the project dependencies.
+- Create a directory named `instance` where the databases will be installed.
 - Run the application by running `poetry run flask --app app run`,
 
 ### Running test
