@@ -45,6 +45,11 @@ def replace_odps(statements: list, parameters: dict) -> list:
     return statements
 
 
+def catalog_block():
+    catalogs = Catalog.query.all()
+    return catalogs
+
+
 @bp.route("/")
 def catalogs_list():
     catalogs = Catalog.query.all()
