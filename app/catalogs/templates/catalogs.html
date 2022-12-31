@@ -1,17 +1,19 @@
 {% extends "layout.html" %}
 {% block title %}Catalogs{% endblock %}
+{% block page_title %}Catalogs{% endblock %}
+
+
 {% block breadcrumbs %}
-<nav class="breadcrumb has-arrow-separator m-4" aria-label="breadcrumbs">
+<nav aria-label="breadcrumb">
   <ul>
     <li><a href="/">Home</a></li>
-    <li class="is-active"><a href="#" aria-current="page">Catalogs</a></li>
+    <li>Catalogs</li>
   </ul>
 </nav>
 {% endblock %}
 {% block content %}
-    <h1 class="title">Catalogs</h1>
     {% if (catalogs is defined) and catalogs %}
-    <table class="table">
+    <table>
         <thead>
             <tr>
                 <th>Name</th>
@@ -34,5 +36,5 @@
         </tbody>
     </table>
     {% endif %}
-    <p><a href={{ url_for("catalogs.catalog_add") }}>Add a Catalog</a></p>
+    <a role="button" href={{ url_for("catalogs.catalog_add") }}>Add a Catalog</a>
 {% endblock %}

@@ -1,78 +1,66 @@
 {% extends "layout.html" %}
 
 {% block title %}{{ control["id"]|upper }}: {{ control["title"] }}{% endblock %}
+{% block page_title %}{{ control["id"]|upper }}: {{ control["title"] }}{% endblock %}
 
 {% block breadcrumbs %}
-<nav class="breadcrumb has-arrow-separator m-4" aria-label="breadcrumbs">
+<nav aria-label="breadcrumb">
     <ul>
         <li><a href="/">Home</a></li>
         <li><a href={{ url_for("catalogs.catalogs_list") }}>Catalogs</a></li>
         <li><a href={{ url_for("catalogs.catalog_view", catalog_id=catalog.id) }}>{{ catalog.title }}</a></li>
-        <li class="is-active"><a href="#" aria-current="page">{{ control["id"]|upper }}: {{ control["title"] }}</a></li>
+        <li>{{ control["id"]|upper }}: {{ control["title"] }}</li>
     </ul>
 </nav>
 {% endblock %}
 
 {% block content %}
-    <h1 class="title">{{ control["id"]|upper }}: {{ control["title"] }}</h1>
-    <h2 class="subtitle">{{ group["id"]|upper }}: {{ group["title"] }}</h2>
-    <section class="box">
-        <p class="subtitle is-3">Control Description</p>
-        {% for s in statement %}
-            <p
-                data-id="{{ s["id"]|replace("_smt", "") }}"
-                data-key="{{ s["label"] }}"
-                class="desc-{{ s["id"]|replace("_smt", "")|length }}"
-            >
-                 {% if s["label"]["value"] %}{{ s["label"]["value"] }}{% endif %} {{ s["prose"] }}
-            </p>
-        {% endfor %}
-    </section>
-    <section class="box">
-        <p class="subtitle is-3">Guidance</p>
+    <h3>{{ group["id"]|upper }}: {{ group["title"] }}</h3>
+    <article>
+    {% for s in statement %}
+        <p
+            data-id="{{ s["id"]|replace("_smt", "") }}"
+            data-key="{{ s["label"] }}"
+            class="desc-{{ s["id"]|replace("_smt", "")|length }}"
+        >
+             {% if s["label"]["value"] %}{{ s["label"]["value"] }}{% endif %} {{ s["prose"] }}
+        </p>
+    {% endfor %}
+    </article>
+    <details open>
+        <summary>Guidance</summary>
         <p>{{ guidance }}</p>
-    </section>
+    </details>
     {% if links|length > 0 %}
         {% if links["related"]|length > 0 %}
-            <section class="box">
-                <p class="subtitle is-3">Related Controls</p>
+            <details>
+                <summary>Related Controls</summary>
                 <p>
-                    {% for rel in links["related"] %}
-                        <a class="is-size-5" href={{ url_for(
-                            "catalogs.control_view",
-                            catalog_id=catalog["id"],
-                            control_id=rel)
-                                }}>{{ rel|upper }}</a>{% if not loop.last %}, {% endif %}
-                    {% endfor %}
+                {% for rel in links["related"] %}
+                    <a href={{ url_for(
+                        "catalogs.control_view",
+                        catalog_id=catalog["id"],
+                        control_id=rel)
+                            }}><b>{{ rel|upper }}</b></a>{% if not loop.last %}, {% endif %}
+                {% endfor %}
                 </p>
-            </section>
+            </details>
         {% endif %}
         {% if links["reference"]|length > 0 %}
-            <section class="box">
-                <p class="subtitle is-3">References</p>
-                <div class="card-content">
-                    {% for ref in links["reference"] %}
-                        <div class="card mb-2">
-                            <header class="card-header">
-                                <p class="card-header-title">
-                                    {{ ref["title"] }}
-                                </p>
-                            </header>
-                            <div class="card-content">
-                                <div class="content">
-                                    {% if ref.citation is defined %}
-                                        <p>{{ ref.citation["text"] }}</p>
-                                    {% endif %}
-                                    {% for rl in ref["rlinks"] %}
-                                        <p><a href={{ rl["href"] }} target="_blank">{{ rl["href"] }}</a></p>
-                                    {% endfor %}
-                            </div>
-                            </div>
-                        </div>
+            <details>
+                <summary>References</summary>
+                {% for ref in links["reference"] %}
+                    <article>
+                    <h4>{{ ref["title"] }}</h4>
+                    {% if ref.citation is defined %}
+                        <p>{{ ref.citation["text"] }}</p>
+                    {% endif %}
+                    {% for rl in ref["rlinks"] %}
+                        <p><a href={{ rl["href"] }} target="_blank">{{ rl["href"] }}</a></p>
                     {% endfor %}
-                </div>
-            </section>
+                    </article>
+                {% endfor %}
+            </details>
         {% endif %}
     {% endif %}
-    <hr/>
 {% endblock %}

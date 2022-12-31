@@ -1,14 +1,39 @@
-@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
-#main {
-  min-height: calc(100vh - 90px);
+@import "https://unpkg.com/@picocss/pico@latest/css/pico.min.css";
+body > header,
+body > footer,
+body > main {
+  padding: 1em;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header, footer {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
 }
 
 footer {
-  height: 75px;
+  text-align: center;
+}
+footer a.logo {
+  margin: 0.5em;
 }
 
-ul.bulletless {
-  list-style: none;
+main {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: auto;
+}
+
+a.update-link {
+  display: inline-block;
+  float: right;
+  margin-top: 2em;
 }
 
 .desc-0 {
