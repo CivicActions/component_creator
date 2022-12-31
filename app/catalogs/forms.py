@@ -39,7 +39,7 @@ class CatalogForm(FlaskForm):
 
 
 class UpdateCatalogForm(FlaskForm):
-    name = StringField(
+    title = StringField(
         "Catalog Name",
         validators=[InputRequired()],
         render_kw={

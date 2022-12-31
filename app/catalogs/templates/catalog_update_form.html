@@ -20,8 +20,8 @@
         {% if form.csrf_token.errors %}
             <div class="warning">You have submitted an invalid CSRF token</div>
         {% endif %}
-        <label for="name">{{ form.name.label }}
-            {{ form.name }}
+        <label for="name">{{ form.title.label }}
+            {{ form.title }}
         </label>
 
         <label for="description">{{ form.description.label }}

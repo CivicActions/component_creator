@@ -67,7 +67,7 @@ def catalog_add():
     if request.method == "POST":
         error = None
         if form.validate_on_submit():
-            title = request.form["name"]
+            title = request.form["title"]
             description = request.form["description"]
             file = request.files["catalog_file"]
             if file and allowed_file(file.filename):
@@ -138,7 +138,7 @@ def catalog_update(catalog_id: int):
 
         flash(error)
 
-    form.name.data = catalog.title
+    form.title.data = catalog.title
     form.description.data = catalog.description
     return render_template(
         "catalog_update_form.html",
