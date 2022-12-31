@@ -1,57 +1,60 @@
 from flask_wtf import FlaskForm
-from wtforms import FileField, StringField, TextAreaField
+from wtforms import FileField, HiddenField, SelectField, StringField, TextAreaField
 from wtforms.validators import InputRequired, length, optional
 
+from app.models.components import ComponentTypes
 from app.oscal.validator import OscalValidator
 
 
-def validate_catalog_file(form, field) -> OscalValidator:
+def validate_component_file(form, field) -> OscalValidator:
     validate = OscalValidator(field.data, "oscal_catalog_schema.json")
     field.data.seek(0)
     return validate
 
 
-class CatalogForm(FlaskForm):
+class ComponentForm(FlaskForm):
     title = StringField(
-        "Catalog Name",
+        "Component Name",
         validators=[InputRequired()],
-        render_kw={
-            "class": "input",
-            "type": "text",
-        },
     )
     description = TextAreaField(
         "Description",
         validators=[optional(), length(max=200)],
         render_kw={
-            "class": "textarea",
             "placeholder": "Enter a short description, 200 characters or less",
         },
     )
-    catalog_file = FileField(
+    component_type = SelectField(
+        "Component Type",
+        choices=[v.value for v in ComponentTypes],
+        default=ComponentTypes.SOFTWARE.value,
+        validate_choice=True,
+    )
+    component_file = FileField(
         "Upload File",
-        validators=[InputRequired(), validate_catalog_file],
+        validators=[validate_component_file],
         render_kw={
-            "class": "file-input",
             "type": "file",
         },
     )
 
 
-class UpdateCatalogForm(FlaskForm):
-    title = StringField(
+class UpdateComponentForm(FlaskForm):
+    name = StringField(
         "Catalog Name",
         validators=[InputRequired()],
-        render_kw={
-            "class": "input",
-            "type": "text",
-        },
     )
     description = TextAreaField(
         "Description",
         validators=[optional(), length(max=200)],
         render_kw={
-            "class": "textarea",
             "placeholder": "Enter a short description, 200 characters or less",
         },
+    )
+
+
+class ComponentAddForm(FlaskForm):
+    component_id = HiddenField(
+        validators=[InputRequired()],
+        render_kw={"id": "add-component"},
     )

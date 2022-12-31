@@ -51,6 +51,25 @@ article.home footer {
   padding: 1em;
 }
 
+article.flash {
+  text-align: center;
+  font-weight: bold;
+  padding: 1em;
+  border: solid 1px #dbdbdb;
+}
+article.flash.error {
+  background-color: hsl(347deg, 90%, 96%);
+}
+article.flash.info {
+  background-color: hsl(206deg, 70%, 96%);
+}
+article.flash.message {
+  background-color: hsl(142deg, 52%, 96%);
+}
+article.flash.warning {
+  background-color: hsl(48deg, 100%, 96%);
+}
+
 .desc-0 {
   margin-left: 1em;
 }

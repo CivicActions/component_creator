@@ -22,6 +22,10 @@ def create_app(config_class=Config):
 
     app.register_blueprint(bp_catalogs, url_prefix="/catalogs")
 
+    from app.components import bp as bp_components
+
+    app.register_blueprint(bp_components, url_prefix="/components")
+
     @app.errorhandler(404)
     def page_not_found(error):
         try:

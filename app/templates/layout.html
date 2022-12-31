@@ -14,12 +14,12 @@
         </header>
         <main class="container">
             {% block breadcrumbs %}{% endblock %}
+            <h2>{% block page_title %}{% endblock %}</h2>
             {% for key, message in get_flashed_messages(with_categories=True) %}
                 <article class="flash {{ key }}">
                     {{  message }}
                 </article>
             {% endfor %}
-            <h2>{% block page_title %}{% endblock %}</h2>
             <section>
                 {% block content %}{% endblock %}
             </section>

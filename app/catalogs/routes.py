@@ -56,7 +56,7 @@ def catalogs_list():
 
     if not catalogs:
         flash(
-            message="There are no Catalogs installed. Click the link below to add one.",
+            message="There are no Catalogs installed. Click the link below to upload one.",
             category="message",
         )
 
@@ -99,9 +99,7 @@ def catalog_add():
                     return redirect(
                         url_for("catalogs.catalog_view", catalog_id=catalog.id)
                     )
-
         flash(error)
-
     try:
         return render_template(
             "catalog_create_form.html", form=form, title="Add Catalog"

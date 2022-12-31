@@ -11,18 +11,18 @@ catalogs = db.Table(
 )
 
 
-class TypesEnum(enum.Enum):
-    INTERCONNECT = "interconnection", "Interconnection"
-    SOFTWARE = "software", "Software"
-    HARDWARE = "hardware", "Hardware"
-    SERVICE = "service", "Service"
-    POLICY = "policy", "Policy"
-    PHYSICAL = "physical", "Physical"
-    PROCESS = "process-procedure", "Process/Procedure"
-    PLAN = "plan", "Plan"
-    GUIDANCE = "guidance", "Guidance"
-    STANDARD = "standard", "Standard"
-    VALIDATION = "validation", "Validation"
+class ComponentTypes(enum.Enum):
+    SOFTWARE = ("software", "Software")
+    GUIDANCE = ("guidance", "Guidance")
+    HARDWARE = ("hardware", "Hardware")
+    INTERCONNECT = ("interconnection", "Interconnection")
+    PHYSICAL = ("physical", "Physical")
+    PLAN = ("plan", "Plan")
+    POLICY = ("policy", "Policy")
+    PROCESS = ("process-procedure", "Process/Procedure")
+    SERVICE = ("service", "Service")
+    STANDARD = ("standard", "Standard")
+    VALIDATION = ("validation", "Validation")
 
 
 class Catalog(Base):
@@ -40,10 +40,11 @@ class Component(Base):
     __tablename__ = "component"
 
     title = db.Column(db.String(150), nullable=False)
+    description = db.Column(db.Text, nullable=False)
     type = db.Column(
-        db.Enum(TypesEnum),
+        db.Enum(ComponentTypes),
         nullable=False,
-        default=TypesEnum.SOFTWARE.value,
+        default=ComponentTypes.SOFTWARE.value,
     )
     filename = db.Column(db.String(150), nullable=False)
     catalog = db.relationship(
