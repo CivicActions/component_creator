@@ -1,48 +1,7 @@
-<nav class="navbar is-size-4" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="mainNavBar">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-
-  <div id="mainNavBar" class="navbar-menu">
-    <div class="navbar-start">
-      <a href={{ url_for("main.index") }} class="navbar-item">
-        Home
-      </a>
-
-      <a href={{ url_for("main.about") }} class="navbar-item">
-        About
-      </a>
-
-{#      <div class="navbar-item has-dropdown is-hoverable">#}
-{#        <a href={{ url_for("components.component_list") }} class="navbar-link">#}
-{#          Components#}
-{#        </a>#}
-{##}
-{#        <div class="navbar-dropdown">#}
-{#          <a href={{ url_for("components.component_add") }} class="navbar-item">#}
-{#            Add a Component#}
-{#          </a>#}
-{#        </div>#}
-{#      </div>#}
-
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a href={{ url_for("catalogs.catalogs_list") }} class="navbar-link">
-          Catalogs
-        </a>
-
-        <div class="navbar-dropdown">
-          <a href={{ url_for("catalogs.catalog_add") }} class="navbar-item">
-            Add a Catalog
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="navbar-end">
-    </div>
-  </div>
+<nav class="container" role="navigation" aria-label="main navigation">
+    <ul>
+        <li><a href={{ url_for("main.index") }}>Home</a></li>
+        <li><a href={{ url_for("main.about") }}>About</a></li>
+        <li><a href={{ url_for("catalogs.catalogs_list") }}>Catalogs</a></li>
+    </ul>
 </nav>

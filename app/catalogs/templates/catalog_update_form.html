@@ -1,53 +1,40 @@
 {% extends "layout.html" %}
 
-{% block title %}Add a Catalog{% endblock %}
+{% block title %}Update Catalog{% endblock %}
+{% block page_title %}Update Catalog{% endblock %}
 
 {% block breadcrumbs %}
-<nav class="breadcrumb has-arrow-separator m-4" aria-label="breadcrumbs">
+<nav aria-label="breadcrumb">
   <ul>
     <li><a href="/">Home</a></li>
     <li><a href={{ url_for("catalogs.catalogs_list") }}>Catalogs</a></li>
-    <li><a href={{ url_for("catalogs.catalog_view", catalog_id=catalog["id"]) }}>{{ catalog["name"] }}</a></li>
-    <li class="is-active"><a href="#" aria-current="page">Update Catalog</a></li>
+    <li><a href={{ url_for("catalogs.catalog_view", catalog_id=catalog["id"]) }}>{{ catalog.title }}</a></li>
+    <li>Update Catalog</li>
   </ul>
 </nav>
 {% endblock %}
 
 {% block content %}
-    <h1 class="title">Update Catalog</h1>
     <form method="POST" enctype="multipart/form-data">
         {{ form.csrf_token }}
         {% if form.csrf_token.errors %}
             <div class="warning">You have submitted an invalid CSRF token</div>
         {% endif %}
-        <div class="field">
-            <label class="label">{{ form.name.label }}</label>
-            <div class="control">
-                {{ form.name }}
-            </div>
-        </div>
-        <div class="field">
-            <label class="label">{{ form.description.label }}</label>
-            <div class="control">
-                {{ form.description }}
-            </div>
-        </div>
+        <label for="name">{{ form.name.label }}
+            {{ form.name }}
+        </label>
 
-        <div class="field is-grouped mt-4">
-            <div class="control">
-                <button class="button is-success">Submit</button>
-            </div>
-            <div class="control">
-                <button class="button is-link is-light">Cancel</button>
-            </div>
-        </div>
+        <label for="description">{{ form.description.label }}
+            {{ form.description }}
+        </label>
+
+        <button type="submit">Submit</button>
+        <button class="secondary">Cancel</button>
     </form>
     <hr/>
     <form action={{ url_for("catalogs.catalog_delete", catalog_id=catalog["id"]) }}>
-        <div class="control">
-            <button class="button is-danger" onclick="return confirm('Are you sure?');">
-                Delete
-            </button>
-        </div>
+        <button class="contrast outline" onclick="return confirm('Are you sure?');">
+            Delete
+        </button>
     </form>
 {% endblock %}

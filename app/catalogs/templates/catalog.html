@@ -1,72 +1,61 @@
 {% extends "layout.html" %}
 
 {% block title %}{{ catalog["name"] }}{% endblock %}
-
+{% block page_title %}{{ metadata["title"] }}{% endblock %}
 {% block breadcrumbs %}
-<nav class="breadcrumb has-arrow-separator m-4" aria-label="breadcrumbs">
+<nav aria-label="breadcrumb">
   <ul>
     <li><a href="/">Home</a></li>
     <li><a href={{ url_for("catalogs.catalogs_list") }}>Catalogs</a></li>
-    <li class="is-active"><a href="#" aria-current="page">{{ catalog["name"] }}</a></li>
+    <li>{{ catalog.title }}</li>
   </ul>
 </nav>
 {% endblock %}
 
 {% block content %}
-    <h1 class="title">{{ name }}</h1>
-    <section class="box">
-        <ul class="is-size-4 bulletless">
-            <li><b>{{ metadata["title"] }}</b></li>
+    <section>
+        <ul>
             <li><b>Version:</b> {{ metadata["version"] }}</li>
             <li><b>OSCAL version:</b> {{ metadata["oscal_version"] }}</li>
             <li><b>Last modified:</b> {{ metadata["last_modified"].strftime("%Y-%m-%d") }}</li>
         </ul>
     </section>
-    <h2 class="subtitle">Control Families</h2>
     <section>
     {% for group in groups %}
-        <div class="card mb-2 family">
-            <header class="card-header">
-                <p class="card-header-title">{{ group["group_id"]|upper }}: {{ group["title"] }}</p>
-            </header>
-            <div class="card-content">
-                <div class="content">
-                    <ul>
-                    {% for control in group["controls"] %}
-                        <li>
-                            <a href={{ url_for(
-                                "catalogs.control_view",
-                                catalog_id=catalog["id"],
-                                control_id=control["control_id"]
-                            ) }}>
-                                <b>{{ control["control_id"]|upper }}:</b> {{ control["title"] }}
-                            </a>
-                            {% if "enhancements" in control %}
-                                <ul>
-                                    {% for enhancement in control["enhancements"] %}
-                                        <li>
-                                            <a href={{ url_for(
-                                                "catalogs.control_view",
-                                                catalog_id=catalog["id"],
-                                                control_id=enhancement["control_id"]
-                                            ) }}>
-                                                <b>{{ enhancement["control_id"]|upper }}:</b> {{ enhancement["title"] }}
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <details>
+            <summary class="secondary" role="button">{{ group["group_id"]|upper }}: {{ group["title"] }}</summary>
+                <ul>
+                {% for control in group["controls"] %}
+                    <li>
+                        <a href={{ url_for(
+                            "catalogs.control_view",
+                            catalog_id=catalog["id"],
+                            control_id=control["control_id"]
+                        ) }}>
+                            <b>{{ control["control_id"]|upper }}:</b> {{ control["title"] }}
+                        </a>
+                        {% if "enhancements" in control %}
+                            <ul>
+                                {% for enhancement in control["enhancements"] %}
+                                    <li>
+                                        <a href={{ url_for(
+                                            "catalogs.control_view",
+                                            catalog_id=catalog["id"],
+                                            control_id=enhancement["control_id"]
+                                        ) }}>
+                                            <b>{{ enhancement["control_id"]|upper }}:</b> {{ enhancement["title"] }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
+        </details>
     {% endfor %}
-        <p class="my-4 has-text-right">
-            <a href={{ url_for("catalogs.catalog_update", catalog_id=catalog["id"]) }}>
-                Update catalog <ion-icon name="create-outline"></ion-icon>
-            </a>
-        </p>
+        <a role="button" class="update-link outline" href={{ url_for("catalogs.catalog_update", catalog_id=catalog["id"]) }}>
+            Update catalog
+        </a>
     </section>
 {% endblock %}

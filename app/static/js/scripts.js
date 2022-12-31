@@ -19,23 +19,3 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
-
-(function($) {
-  $(".navbar-burger").on("click", function() {
-      $(".navbar-burger").toggleClass("is-active");
-      $(".navbar-menu").toggleClass("is-active");
-  });
-
-  let input = document.querySelector("#file-upload>.file-label>.file-input");
-
-  if (input !== null) {
-    input.onchange = function () {
-      if (input.files.length > 0) {
-        let fileNameContainer = document.querySelector(
-          "#file-upload > .file-label>.file-name"
-        );
-        fileNameContainer.textContent = input.files[0].name;
-      }
-    }
-  }
-})(jQuery);

@@ -12,7 +12,7 @@ def validate_catalog_file(form, field) -> bool:
 
 
 class CatalogForm(FlaskForm):
-    name = StringField(
+    title = StringField(
         "Catalog Name",
         validators=[InputRequired()],
         render_kw={
