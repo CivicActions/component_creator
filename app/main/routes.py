@@ -2,15 +2,18 @@ import os
 
 from flask import current_app, render_template, send_from_directory
 
+from app.catalogs.routes import catalog_block
 from app.main import bp
 
 
 @bp.route("/")
 def index():
+    catalogs = catalog_block()
     return render_template(
-        "page.html",
+        "home.html",
         content="",
-        title="Component Creator",
+        catalogs=catalogs,
+        components={},
     )
 
 

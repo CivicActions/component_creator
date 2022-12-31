@@ -37,6 +37,23 @@ a.update-link {
   margin-top: 2em;
 }
 
+h1.logo {
+  font-size: 1.5rem;
+  margin-bottom: 0px;
+}
+
+article.home {
+  header {
+    padding: 1em;
+    h3 {
+      margin: 0px;
+    }
+  }
+  footer {
+    padding: 1em;
+  }
+}
+
 .desc-0 {
   margin-left: 1em;
 }

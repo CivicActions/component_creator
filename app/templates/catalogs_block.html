@@ -1,0 +1,19 @@
+<article class="home">
+    <header><h3>Catalogs</h3></header>
+    {% if catalogs %}
+    <ul>
+        {% for catalog in catalogs %}
+            <li>
+                <a href="#">
+                    {{ catalog.title }}
+                </a>
+           </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>There are no catalogs yet.</p>
+    {% endif %}
+    <footer>
+        <a href={{ url_for("catalogs.catalog_add") }}>Create new Catalog</a>
+    </footer>
+</article>

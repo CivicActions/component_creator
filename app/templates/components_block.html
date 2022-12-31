@@ -1,0 +1,19 @@
+<article class="home">
+    <header><h3>Components</h3></header>
+    {% if components %}
+    <ul>
+        {% for component in components %}
+            <li>
+                <a href="#">
+                    {{ component.title }}
+                </a>
+           </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>There are no Components yet.</p>
+    {% endif %}
+    <footer>
+        <a href="#">Create new Component</a>
+    </footer>
+</article>
