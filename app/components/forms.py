@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import FileField, HiddenField, SelectField, StringField, TextAreaField
 from wtforms.validators import InputRequired, length, optional
 
-from app.models.components import ComponentTypes
+from app.oscal.component import ComponentTypeEnum
 from app.oscal.validator import OscalValidator
 
 
@@ -26,9 +26,8 @@ class ComponentForm(FlaskForm):
     )
     component_type = SelectField(
         "Component Type",
-        choices=[v.value for v in ComponentTypes],
-        default=ComponentTypes.SOFTWARE.value,
-        validate_choice=True,
+        choices=[(v.name, v.value) for v in ComponentTypeEnum],
+        default=ComponentTypeEnum.software.value,
     )
     component_file = FileField(
         "Upload File",

@@ -2,7 +2,11 @@ from flask import Flask, abort, render_template
 from jinja2 import TemplateNotFound
 
 from app.extensions import db
-from app.models.components import Catalog, Component, catalogs  # noqa: F401
+from app.models.components import (  # noqa: F401
+    CatalogFile,
+    ComponentFile,
+    component_catalog,
+)
 from config import Config
 
 

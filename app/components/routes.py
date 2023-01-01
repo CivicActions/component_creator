@@ -1,13 +1,22 @@
 from pathlib import Path
 
-from flask import abort, current_app, flash, redirect, render_template, request, url_for
+from flask import (
+    abort,
+    current_app,
+    flash,
+    redirect,
+    render_template,
+    request,
+    send_from_directory,
+    url_for,
+)
 from jinja2 import TemplateNotFound
 from werkzeug.utils import secure_filename
 
 from app.components import bp
-from app.components.component_forms import ComponentForm
+from app.components.forms import ComponentForm
 from app.extensions import db
-from app.models.components import Component as Comp
+from app.models.components import ComponentFile
 from app.oscal.component import Component, ComponentDefinition, ComponentModel, Metadata
 
 ALLOWED_EXTENSIONS = {"json"}
@@ -53,13 +62,13 @@ def load_component_file(filepath: str) -> Component:
 
 
 def control_add(component_id: int, control_id: str) -> dict:
-    component = Comp.query.get_or_404(component_id)
+    component = ComponentFile.query.get_or_404(component_id)
     return component
 
 
 @bp.route("/", methods=["GET"])
 def components_list():
-    components = Comp.query.all()
+    components = ComponentFile.query.all()
 
     if not components:
         flash(
@@ -68,22 +77,21 @@ def components_list():
         )
 
     try:
-        return render_template("components.html", components=components)
+        return render_template("components/list.html", components=components)
     except TemplateNotFound:
         abort(404)
 
 
-@bp.route("/add", methods=["GET", "POST"])
-def component_add():
+@bp.route("/create", methods=["GET", "POST"])
+def component_create():
     form = ComponentForm()
     if request.method == "POST":
         error = None
         file = None
         if form.validate_on_submit():
-            title = request.form["name"]
-            description = request.form["description"]
-            component_type = request.form["component_type"]
-            catalog = request.form["catalog"]
+            title = form.title.data
+            description = form.description.data
+            component_type = form.component_type.data
             if "component_file" in request.files:
                 file = request.files["component_file"]
             if file and allowed_file(file.filename):
@@ -101,16 +109,17 @@ def component_add():
                         "name": title,
                         "description": description,
                         "type": component_type,
-                        "catalog": catalog,
                     }
                 )
 
             try:
-                component = Comp(
+                component = ComponentFile(
                     title=title,
                     description=description,
+                    type=component_type,
+                    filename=filepath,
                 )
-                db.session.add(catalog)
+                db.session.add(component)
                 db.session.commit()
             except db.SQLAlchemyError as exc:
                 error = f"Component {title} already exists: {exc}"
@@ -121,5 +130,25 @@ def component_add():
                 )
         flash(error)
     return render_template(
-        "component_create_form.html", form=form, title="Add Component"
+        "components/create_form.html", form=form, title="Add Component"
     )
+
+
+@bp.route("/<int:component_id>", methods=["GET"])
+def component_view(component_id):
+    component_data = ComponentFile.query.get_or_404(component_id)
+    component = load_component_file(component_data.filename)
+    file = Path(component_data.filename)
+
+    return render_template(
+        "components/component.html",
+        component=component_data,
+        json=component,
+        filename=file.name,
+    )
+
+
+@bp.route("/download/<path:filename>", methods=["GET"])
+def file_download(filename: str):
+    upload_dir = Path(current_app.config["UPLOAD_FOLDER"]).joinpath("components")
+    return send_from_directory(directory=upload_dir, path=filename)
