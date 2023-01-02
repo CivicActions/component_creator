@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from flask import (
+    Markup,
     abort,
     current_app,
     flash,
@@ -16,13 +17,13 @@ from werkzeug.utils import secure_filename
 from app.components import bp
 from app.components.forms import ComponentForm
 from app.extensions import db
-from app.models.components import ComponentFile
+from app.models.components import CatalogFile, ComponentFile
 from app.oscal.component import Component, ComponentDefinition, ComponentModel, Metadata
 
 ALLOWED_EXTENSIONS = {"json"}
 
 
-def allowed_file(filename):
+def allowed_file(filename: str) -> bool:
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
@@ -135,8 +136,19 @@ def component_create():
 
 
 @bp.route("/<int:component_id>", methods=["GET"])
-def component_view(component_id):
+def component_view(component_id: int):
     component_data = ComponentFile.query.get_or_404(component_id)
+    catalogs = CatalogFile.query.all()
+
+    if not catalogs:
+        flash(
+            message=Markup(
+                "At least one Catalog is required in order to add Controls to your Component "
+                "<a href='/catalogs/create'>Add a Catalog</a>"
+            ),
+            category="warning",
+        )
+
     component = load_component_file(component_data.filename)
     file = Path(component_data.filename)
 
@@ -145,10 +157,30 @@ def component_view(component_id):
         component=component_data,
         json=component,
         filename=file.name,
+        catalogs=catalogs,
     )
 
 
 @bp.route("/download/<path:filename>", methods=["GET"])
-def file_download(filename: str):
+def component_file_download(filename: str):
     upload_dir = Path(current_app.config["UPLOAD_FOLDER"]).joinpath("components")
     return send_from_directory(directory=upload_dir, path=filename)
+
+
+@bp.route("/<component_id>/add/catalog/<int:catalog_id>", methods=["GET"])
+def component_add_catalog(component_id: int, catalog_id: int):
+    component = ComponentFile.query.get_or_404(component_id)
+    catalog = CatalogFile.query.get_or_404(catalog_id)
+    if catalog.id not in component.catalogs:
+        try:
+            component.catalogs.append(catalog)
+            db.session.add(component)
+            db.session.commit()
+        except db.SQLAlchemyError as exc:
+            flash(f"Unable to add Catalog: {catalog.title}: {exc}")
+        else:
+            flash(f"Catalog {catalog.title} added.", "message")
+    else:
+        flash(f"Catalog {catalog.title} already added to {component.title}", "error")
+
+    return redirect(url_for("components.component_view", component_id=component.id))

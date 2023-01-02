@@ -8,7 +8,7 @@
   <ul>
     <li><a href="/">Home</a></li>
     <li><a href={{ url_for("catalogs.catalogs_list") }}>Catalogs</a></li>
-    <li><a href={{ url_for("catalogs.catalog_view", catalog_id=catalog["id"]) }}>{{ catalog.title }}</a></li>
+    <li><a href={{ url_for("catalogs.catalog_view", catalog_id=catalog.id) }}>{{ catalog.title }}</a></li>
     <li>Update Catalog</li>
   </ul>
 </nav>
@@ -26,6 +26,10 @@
 
         <label for="description">{{ form.description.label }}
             {{ form.description }}
+        </label>
+
+        <label for="source">{{ form.source.label }}
+            {{ form.source }}
         </label>
 
         <button type="submit">Submit</button>

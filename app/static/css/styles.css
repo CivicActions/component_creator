@@ -70,6 +70,10 @@ article.flash.warning {
   background-color: hsl(48deg, 100%, 96%);
 }
 
+.required {
+  color: #e53935;
+}
+
 .desc-0 {
   margin-left: 1em;
 }

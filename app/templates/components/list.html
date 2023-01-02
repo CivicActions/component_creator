@@ -26,12 +26,12 @@
             {% for component in components %}
                 <tr>
                     <td>
-                        <a href={{ url_for("components.components_view", component_id=component["id"]) }}>
+                        <a href={{ url_for("components.component_view", component_id=component.id) }}>
                             {{ component.title }}
                         </a>
                     </td>
-                    <td>{{ component["description"] }}</td>
-                    <td>{{ component["created"].strftime("%Y-%m-%d") }}</td>
+                    <td>{{ component.description }}</td>
+                    <td>{{ component.created_on.strftime("%Y-%m-%d") }}</td>
                 </tr>
             {% endfor %}
         </tbody>

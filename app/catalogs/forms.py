@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import FileField, StringField, TextAreaField
-from wtforms.validators import InputRequired, length, optional
+from wtforms.validators import InputRequired, length
 
 from app.oscal.validator import OscalValidator
 
@@ -16,24 +16,32 @@ class CatalogForm(FlaskForm):
         "Catalog Name",
         validators=[InputRequired()],
         render_kw={
-            "class": "input",
             "type": "text",
+            "required": "required",
         },
     )
     description = TextAreaField(
         "Description",
-        validators=[optional(), length(max=200)],
+        validators=[length(max=200)],
         render_kw={
-            "class": "textarea",
+            "required": "required",
             "placeholder": "Enter a short description, 200 characters or less",
+        },
+    )
+    source = StringField(
+        "Source",
+        validators=[length(max=150)],
+        render_kw={
+            "required": "required",
+            "placeholder": "Enter the source URL for this catalog.",
         },
     )
     catalog_file = FileField(
         "Upload File",
         validators=[InputRequired(), validate_catalog_file],
         render_kw={
-            "class": "file-input",
             "type": "file",
+            "required": "required",
         },
     )
 
@@ -49,9 +57,16 @@ class UpdateCatalogForm(FlaskForm):
     )
     description = TextAreaField(
         "Description",
-        validators=[optional(), length(max=200)],
+        validators=[InputRequired(), length(max=200)],
         render_kw={
             "class": "textarea",
             "placeholder": "Enter a short description, 200 characters or less",
+        },
+    )
+    source = StringField(
+        "Source",
+        validators=[InputRequired(), length(max=150)],
+        render_kw={
+            "placeholder": "Enter the source URL for this catalog.",
         },
     )

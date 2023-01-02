@@ -16,9 +16,34 @@
 {% block content %}
     <p>{{ component["description"] }}</p>
     <p>
-        <a href={{ url_for("components.file_download", filename=filename) }} download={{ filename }}>Download file</a>
+        <a href={{ url_for("components.component_file_download", filename=filename) }} download={{ filename }}>
+            Download file
+        </a>
     </p>
     <section>
-    component display
+        <h3>Add Controls</h3>
+        {% for catalog in component.catalogs %}
+            <ul>
+                <li>{{ catalog.title }}</li>
+            </ul>
+        {% endfor %}
+    </section>
+    <section>
+        <h3>Add Catalogs</h3>
+        {% for cat in catalogs %}
+            <ul>
+            {% if cat not in component.catalogs %}
+                <li>
+                    <a href={{ url_for(
+                        "components.component_add_catalog",
+                        component_id=component.id,
+                        catalog_id=cat.id
+                        ) }}>
+                        {{ cat.title }}
+                    </a>
+                </li>
+            {% endif %}
+            </ul>
+        {% endfor %}
     </section>
 {% endblock %}

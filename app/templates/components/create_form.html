@@ -19,16 +19,19 @@
         {% if form.csrf_token.errors %}
             <div class="warning">You have submitted an invalid CSRF token</div>
         {% endif %}
-        <label class="label">{{ form.title.label }}
+        <label class="label">{{ form.title.label.text }} <span class="required">*</span>
             {{ form.title }}
         </label>
-        <label class="label">{{ form.description.label }}
+
+        <label class="label">{{ form.description.label.text }} <span class="required">*</span>
             {{ form.description }}
         </label>
-        <label class="label">{{ form.component_type.label }}
+
+        <label class="label">{{ form.component_type.label.text }} <span class="required">*</span>
             {{ form.component_type }}
         </label>
-        <label class="file-label">{{ form.component_file.label }}
+
+        <label class="file-label">{{ form.component_file.label.text }}
             {{ form.component_file }}
         </label>
 

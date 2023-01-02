@@ -74,6 +74,7 @@ def catalog_create():
         if form.validate_on_submit():
             title = form.title.data
             description = form.description.data
+            source = form.source.data
             file = form.catalog_file.data
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
@@ -88,6 +89,7 @@ def catalog_create():
                     catalog = CatalogFile(
                         title=title,
                         description=description,
+                        source=source,
                         filename=filepath,
                     )
                     db.session.add(catalog)
@@ -125,24 +127,22 @@ def catalog_update(catalog_id: int):
     catalog = CatalogFile.query.get_or_404(catalog_id)
 
     if request.method == "POST":
-        error = None
         if form.validate_on_submit():
-            catalog.title = request.form["name"]
-            catalog.description = request.form["description"]
+            catalog.title = form.title.data
+            catalog.description = form.description.data
+            catalog.source = form.source.data
 
             try:
                 db.session.add(catalog)
                 db.session.commit()
             except db.IntegrityError:
-                error = f"Catalog {catalog_id} update failed."
+                flash(f"Catalog {catalog_id} update failed.")
             else:
                 flash(f"Catalog {catalog.title} has been updated.")
                 return redirect(url_for("catalogs.catalog_view", catalog_id=catalog_id))
-
-        flash(error)
-
     form.title.data = catalog.title
     form.description.data = catalog.description
+    form.source.data = catalog.source
     return render_template(
         "catalogs/update_form.html",
         form=form,

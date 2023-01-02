@@ -15,10 +15,11 @@ class CatalogFile(Base):
 
     title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.Text, nullable=False)
+    source = db.Column(db.String(150), nullable=False)
     filename = db.Column(db.String(150), nullable=False)
 
     def __repr__(self):
-        return f"<Catalog '{self.title}'"
+        return self.title
 
 
 class ComponentFile(Base):
@@ -39,4 +40,4 @@ class ComponentFile(Base):
     )
 
     def __repr__(self):
-        return f"<Component '{self.title}'"
+        return self.title

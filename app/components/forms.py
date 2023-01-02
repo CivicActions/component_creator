@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import FileField, HiddenField, SelectField, StringField, TextAreaField
-from wtforms.validators import InputRequired, length, optional
+from wtforms.validators import InputRequired, length
 
 from app.oscal.component import ComponentTypeEnum
 from app.oscal.validator import OscalValidator
@@ -16,11 +16,15 @@ class ComponentForm(FlaskForm):
     title = StringField(
         "Component Name",
         validators=[InputRequired()],
+        render_kw={
+            "required": "required",
+        },
     )
     description = TextAreaField(
         "Description",
-        validators=[optional(), length(max=200)],
+        validators=[InputRequired(), length(max=200)],
         render_kw={
+            "required": "required",
             "placeholder": "Enter a short description, 200 characters or less",
         },
     )
@@ -45,7 +49,7 @@ class UpdateComponentForm(FlaskForm):
     )
     description = TextAreaField(
         "Description",
-        validators=[optional(), length(max=200)],
+        validators=[InputRequired(), length(max=200)],
         render_kw={
             "placeholder": "Enter a short description, 200 characters or less",
         },
