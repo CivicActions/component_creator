@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 from flask import (
@@ -18,7 +19,15 @@ from app.components import bp
 from app.components.forms import ComponentForm
 from app.extensions import db
 from app.models.components import CatalogFile, ComponentFile
-from app.oscal.component import Component, ComponentDefinition, ComponentModel, Metadata
+from app.oscal.catalog import CatalogModel
+from app.oscal.component import (
+    Component,
+    ComponentDefinition,
+    ComponentModel,
+    ControlImplementation,
+    ImplementedRequirement,
+    Metadata,
+)
 
 ALLOWED_EXTENSIONS = {"json"}
 
@@ -46,14 +55,12 @@ def component_create_file(data: dict) -> str:
     )
     component = ComponentModel(component_definition=component_definition)
     filepath = base_path.joinpath(filename).with_suffix(".json")
-    json_file = component.json(indent=2)
-    with open(filepath, "w+") as f:
-        f.write(json_file)
+    write_component_file(filepath, component)
 
     return filepath.as_posix()
 
 
-def load_component_file(filepath: str) -> Component:
+def load_component_file(filepath: str) -> ComponentModel:
     try:
         component = ComponentModel.from_json(filepath)
         return component
@@ -62,9 +69,70 @@ def load_component_file(filepath: str) -> Component:
         current_app.logger(f"Error loading component: {exc}")
 
 
-def control_add(component_id: int, control_id: str) -> dict:
-    component = ComponentFile.query.get_or_404(component_id)
+def write_component_file(filepath: Path, definition: ComponentModel):
+    json_file = definition.json(indent=2)
+    try:
+        with open(filepath, "w+") as f:
+            f.write(json_file)
+    except IOError as exc:
+        flash("Error writing Component file.", "error")
+        logging.error(f"Error writing file {filepath}: {exc}")
+
+
+def add_implemented_requirement(control_id: str) -> ImplementedRequirement:
+    return ImplementedRequirement(
+        control_id=control_id,
+        description="Add Control narrative",
+    )
+
+
+def add_implementations(
+    component_data: ComponentFile, catalog_id: int, control_id: str
+):
+    definition = load_component_file(component_data.filename)
+    catalog = CatalogFile.query.get_or_404(catalog_id)
+
+    component = definition.component_definition.components[0]
+    if check_existing_implementaton(catalog.source, component.control_implementations):
+        component = update_control_implementation(component, control_id)
+    else:
+        component = add_control_implementation(component, catalog, control_id)
+    definition.component_definition.components[0] = component
+    write_component_file(Path(component_data.filename), definition)
+
+
+def add_control_implementation(
+    component: Component, catalog: CatalogFile, control_id: str
+) -> Component:
+    requirement = add_implemented_requirement(control_id)
+    component.control_implementations.append(
+        ControlImplementation(
+            source=catalog.source,
+            description=catalog.title,
+            implemented_requirements=[requirement],
+        )
+    )
     return component
+
+
+def update_control_implementation(component: Component, control_id: str) -> Component:
+    requirement = add_implemented_requirement(control_id)
+    component.control_implementations.implemented_requirements.append(requirement)
+    return Component
+
+
+def check_existing_implementaton(source: str, implementation: list) -> bool:
+    for ci in implementation:
+        if ci["source"] == source:
+            return True
+    return False
+
+
+def check_existing_control(control_id: str, requirement: list) -> bool:
+    for ir in requirement:
+        if ir["control-id"] == control_id:
+            return True
+    return False
 
 
 @bp.route("/", methods=["GET"])
@@ -167,7 +235,7 @@ def component_file_download(filename: str):
     return send_from_directory(directory=upload_dir, path=filename)
 
 
-@bp.route("/<component_id>/add/catalog/<int:catalog_id>", methods=["GET"])
+@bp.route("<int:component_id>/add/catalog/<int:catalog_id>", methods=["GET"])
 def component_add_catalog(component_id: int, catalog_id: int):
     component = ComponentFile.query.get_or_404(component_id)
     catalog = CatalogFile.query.get_or_404(catalog_id)
@@ -184,3 +252,29 @@ def component_add_catalog(component_id: int, catalog_id: int):
         flash(f"Catalog {catalog.title} already added to {component.title}", "error")
 
     return redirect(url_for("components.component_view", component_id=component.id))
+
+
+@bp.route("<int:component_id>/catalog/<int:catalog_id>", methods=["GET"])
+def component_show_catalog(component_id: int, catalog_id: int):
+    component = ComponentFile.query.get_or_404(component_id)
+    catalog_data = CatalogFile.query.get_or_404(catalog_id)
+    catalog = CatalogModel.from_json(catalog_data.filename)
+    metadata = catalog.metadata
+    groups = catalog.get_groups()
+    return render_template(
+        "components/control_add_form.html",
+        component=component,
+        metadata=metadata,
+        groups=groups,
+        catalog=catalog_data,
+    )
+
+
+@bp.route(
+    "<int:component_id>/catalog/<int:catalog_id>/<string:control_id>", methods=["GET"]
+)
+def component_add_control(component_id: int, catalog_id: int, control_id: str):
+    component_data = ComponentFile.query.get_or_404(component_id)
+    add_implementations(component_data, catalog_id, control_id)
+
+    return redirect(url_for("components.component_view", component_id=component_id))

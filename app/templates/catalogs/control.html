@@ -56,7 +56,7 @@
                         <p>{{ ref.citation["text"] }}</p>
                     {% endif %}
                     {% for rl in ref["rlinks"] %}
-                        <p><a href={{ rl["href"] }} target="_blank">{{ rl["href"] }}</a></p>
+                        <p><a href={{ rl["href"] }} target="_blank">{{ rl["href"] }}</a> <ion-icon name="open-outline"></ion-icon></p>
                     {% endfor %}
                     </article>
                 {% endfor %}

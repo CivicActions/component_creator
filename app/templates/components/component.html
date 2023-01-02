@@ -17,16 +17,25 @@
     <p>{{ component["description"] }}</p>
     <p>
         <a href={{ url_for("components.component_file_download", filename=filename) }} download={{ filename }}>
-            Download file
+            Download file <ion-icon name="download-outline"></ion-icon>
         </a>
     </p>
     <section>
-        <h3>Add Controls</h3>
-        {% for catalog in component.catalogs %}
-            <ul>
-                <li>{{ catalog.title }}</li>
-            </ul>
-        {% endfor %}
+    <h3>Add Controls</h3>
+    {% for catalog in component.catalogs %}
+        <article class="component">
+            <header><b>Catalog: {{ catalog.title }}</b></header>
+            <footer>
+                <a role="button" href={{ url_for(
+                    "components.component_show_catalog",
+                    component_id=component.id,
+                    catalog_id=catalog.id
+                )  }}>
+                    Add Control
+                </a>
+            </footer>
+        </article>
+    {% endfor %}
     </section>
     <section>
         <h3>Add Catalogs</h3>

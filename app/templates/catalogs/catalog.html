@@ -18,6 +18,7 @@
             <li><b>Version:</b> {{ metadata["version"] }}</li>
             <li><b>OSCAL version:</b> {{ metadata["oscal_version"] }}</li>
             <li><b>Last modified:</b> {{ metadata["last_modified"].strftime("%Y-%m-%d") }}</li>
+            <li><a href={{ catalog.source }} target="_blank">Source</a> <ion-icon name="open-outline"></ion-icon></li>
         </ul>
     </section>
     <section>

@@ -1,82 +1,64 @@
 {% extends "layout.html" %}
 
-{% block title %}{{ component["name"] }}{% endblock %}
+{% block title %}Add Control{% endblock %}
+{% block page_title %}Add Controls from {{ catalog.title }}{% endblock %}
 
 {% block breadcrumbs %}
-<nav class="breadcrumb has-arrow-separator m-4" aria-label="breadcrumbs">
+<nav aria-label="breadcrumb">
   <ul>
     <li><a href="/">Home</a></li>
-    <li><a href={{ url_for("components.component_list") }}>Components</a></li>
-    <li>
-        <a href={{ url_for("components.component_view", component_id=component["id"]) }}>{{ component["name"] }}</a>
-    </li>
-    <li class="is-active"><a href="#" aria-current="page">Add Control</a></li>
+    <li><a href={{ url_for("components.components_list") }}>Components</a></li>
+    <li><a href={{ url_for("components.component_view", component_id=component.id) }}>{{ component.title }}</a></li>
+    <li>Add Controls</li>
   </ul>
 </nav>
 {% endblock %}
 
 {% block content %}
-    <h1 class="title">Add a Control</h1>
-    <section class="box">
-        <ul class="is-size-4 bulletless">
-            <li><b>{{ metadata["title"] }}</b></li>
+    <section>
+        <ul>
             <li><b>Version:</b> {{ metadata["version"] }}</li>
             <li><b>OSCAL version:</b> {{ metadata["oscal_version"] }}</li>
             <li><b>Last modified:</b> {{ metadata["last_modified"].strftime("%Y-%m-%d") }}</li>
+            <li><a href={{ catalog.source }} target="_blank">Source</a> <ion-icon name="open-outline"></ion-icon></li>
         </ul>
     </section>
-    {{ controls }}
-    <section id="accordion">
+    <section>
     {% for group in groups %}
-        <div class="card mb-2 family">
-            <header class="card-header accordion-header">
-                <p class="card-header-title">
-                    {{ group["group_id"]|upper }}: {{ group["title"] }}
-                </p>
-                <b><ion-icon class="is-pulled-right accordion-icon mt-4 mr-4" name="add-outline"></ion-icon></b>
-            </header>
-            <div class="card-content accordion-content">
-                <div class="content">
-                    <ul class="bulletless">
-                    {% for control in group["controls"] %}
-                        <li>
-                            <b>{{ control["control_id"]|upper }}:</b> {{ control["title"] }}
-                            <a href="#"
-                               class="is-pulled-right mr-4"
-                               onClick="addComponent('{{ control["control_id"] }}'); return false;"
-                            >
-                                Add <ion-icon name="add-circle-outline"></ion-icon>
-                            </a>
-                            {% if "enhancements" in control %}
-                                <ul>
-                                    {% for enhancement in control["enhancements"] %}
-                                        <li>
-                                            <b>{{ enhancement["control_id"]|upper }}:</b> {{ enhancement["title"] }}
-                                            <a href="#"
-                                               class="is-pulled-right mr-4"
-                                               onClick="addComponent('{{ control["control_id"] }}'); return false;"
-                                            >
-                                                Add <ion-icon name="add-circle-outline"></ion-icon>
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <details>
+            <summary class="secondary" role="button">{{ group["group_id"]|upper }}: {{ group["title"] }}</summary>
+                <ul>
+                {% for ctrl in group["controls"] %}
+                    <li>
+                        <b>{{ ctrl["control_id"]|upper }}:</b> {{ ctrl["title"] }}
+                        <a href={{ url_for(
+                            "components.component_add_control",
+                            component_id=component.id,
+                            catalog_id=catalog.id,
+                            control_id=ctrl["control_id"]
+                        ) }} class="right-link">
+                            Add to {{ component.title }}
+                        </a>
+                        {% if "enhancements" in ctrl %}
+                            <ul>
+                                {% for enhancement in ctrl["enhancements"] %}
+                                    <li>
+                                        <b>{{ enhancement["control_id"]|upper }}:</b> {{ enhancement["title"] }}
+                                        <a href={{ url_for(
+                                            "components.component_add_control",
+                                            component_id=component.id,
+                                            catalog_id=catalog.id,
+                                            control_id=enhancement["control_id"]
+                                        ) }} class="right-link">
+                                            Add to Component
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
+        </details>
     {% endfor %}
-    </section>
-    <form name="add-component-form" method="POST">
-        {{ form.csrf_token }}
-        {{ form.component_id }}
-    </form>
-{% endblock %}
-
-{% block scripts %}
-    <script src="{{ url_for('static', filename='js/accordion.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/add_component.js') }}"></script>
 {% endblock %}

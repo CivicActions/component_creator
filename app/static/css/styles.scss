@@ -38,11 +38,17 @@ a.update-link {
   margin-top: 2em;
 }
 
+a.right-link {
+  float: right;
+  margin-right: 1em;
+}
+
 h1.logo {
   font-size: 1.5rem;
   margin-bottom: 0px;
 }
 
+article.component,
 article.home {
   header {
     padding: 1em;
