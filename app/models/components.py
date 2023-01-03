@@ -1,5 +1,7 @@
+from flask import current_app, flash
+
 from app.extensions import Base, db
-from app.oscal.component import ComponentTypeEnum
+from app.oscal.component import ComponentModel, ComponentTypeEnum
 
 component_catalog = db.Table(
     "component_catalog",
@@ -41,3 +43,12 @@ class ComponentFile(Base):
 
     def __repr__(self):
         return self.title
+
+    def write_file(self, component: ComponentModel):
+        json_file = component.json(indent=2)
+        try:
+            with open(self.filename, "w+") as f:
+                f.write(json_file)
+        except IOError as exc:
+            flash("Error writing Component file.", "error")
+            current_app.logger(f"Error writing file {self.filename}: {exc}")

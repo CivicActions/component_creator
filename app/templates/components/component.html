@@ -25,6 +25,15 @@
     {% for catalog in component.catalogs %}
         <article class="component">
             <header><b>Catalog: {{ catalog.title }}</b></header>
+            {% for c in json.component_definition.components %}
+                {% for ci in c.control_implementations %}
+                    {%  if ci.description == catalog.title %}
+                        {% for ir in ci.implemented_requirements %}
+                            <p>{{ ir.control_id }} {{ ir.description }}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
             <footer>
                 <a role="button" href={{ url_for(
                     "components.component_show_catalog",
