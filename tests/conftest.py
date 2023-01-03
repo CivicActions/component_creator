@@ -11,6 +11,7 @@ def catalog():
     catalog = CatalogFile(
         title="Test Catalog",
         description="This is the description",
+        source="https://pages.nist.gov/OSCAL/",
         filename="tests/data/NIST_SP_800-53_rev5_TEST.json",
     )
     return catalog
@@ -42,11 +43,13 @@ def init_database():
     catalog1 = CatalogFile(
         title="Test Catalog",
         description="This is the description",
+        source="https://pages.nist.gov/OSCAL/",
         filename="tests/data/NIST_SP_800-53_rev5_TEST.json",
     )
     catalog2 = CatalogFile(
         title="Test Catalog Too",
         description="This is another description",
+        source="https://pages.nist.gov/OSCAL/",
         filename="tests/data/NIST_SP_800-53_rev5_TEST.json",
     )
     db.session.add(catalog1)

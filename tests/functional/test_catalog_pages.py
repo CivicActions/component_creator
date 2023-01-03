@@ -18,9 +18,9 @@ def test_catalog_add(test_client, init_database):
     WHEN the '/catalogs/add' page is requested (GET)
     THEN check the response is valid
     """
-    response = test_client.get("/catalogs/add")
+    response = test_client.get("/catalogs/create")
     assert response.status_code == 200
-    assert b"Add a new Catalog" in response.data
+    assert b"Add a Catalog" in response.data
 
 
 def test_catalog_view(test_client, init_database):

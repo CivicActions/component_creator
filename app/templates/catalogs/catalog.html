@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}{{ catalog["name"] }}{% endblock %}
+{% block title %}{{ catalog.title }}{% endblock %}
 {% block page_title %}{{ metadata["title"] }}{% endblock %}
 {% block breadcrumbs %}
 <nav aria-label="breadcrumb">
@@ -20,6 +20,9 @@
             <li><b>Last modified:</b> {{ metadata["last_modified"].strftime("%Y-%m-%d") }}</li>
             <li><a href={{ catalog.source }} target="_blank">Source</a> <ion-icon name="open-outline"></ion-icon></li>
         </ul>
+    </section>
+    <section>
+        {{ catalog.description }}
     </section>
     <section>
     {% for group in groups %}
