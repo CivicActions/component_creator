@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Control{% endblock %}
+{% block page_title %}Add Controls from {{ catalog.title }}{% endblock %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href={{ url_for("components.components_list") }}>Components</a></li>
+    <li><a href={{ url_for("components.component_view", component_id=component.id) }}>{{ component.title }}</a></li>
+    <li>Add Controls</li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+    <section>
+        <ul>
+            <li><b>Version:</b> {{ metadata["version"] }}</li>
+            <li><b>OSCAL version:</b> {{ metadata["oscal_version"] }}</li>
+            <li><b>Last modified:</b> {{ metadata["last_modified"].strftime("%Y-%m-%d") }}</li>
+            <li><a href={{ catalog.source }} target="_blank">Source</a> <ion-icon name="open-outline"></ion-icon></li>
+        </ul>
+    </section>
+    <section>
+    {% for group in groups %}
+        <details>
+            <summary class="secondary" role="button">{{ group["group_id"]|upper }}: {{ group["title"] }}</summary>
+                <ul>
+                {% for ctrl in group["controls"] %}
+                    <li>
+                        <b>{{ ctrl["control_id"]|upper }}:</b> {{ ctrl["title"] }}
+                        <a href={{ url_for(
+                            "components.component_add_control",
+                            component_id=component.id,
+                            catalog_id=catalog.id,
+                            control_id=ctrl["control_id"]
+                        ) }} class="right-link">
+                            Add to {{ component.title }}
+                        </a>
+                        {% if "enhancements" in ctrl %}
+                            <ul>
+                                {% for enhancement in ctrl["enhancements"] %}
+                                    <li>
+                                        <b>{{ enhancement["control_id"]|upper }}:</b> {{ enhancement["title"] }}
+                                        <a href={{ url_for(
+                                            "components.component_add_control",
+                                            component_id=component.id,
+                                            catalog_id=catalog.id,
+                                            control_id=enhancement["control_id"]
+                                        ) }} class="right-link">
+                                            Add to Component
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
+        </details>
+    {% endfor %}
+{% endblock %}

@@ -1,72 +1,63 @@
 from flask_wtf import FlaskForm
-from wtforms import FileField, StringField, TextAreaField
+from wtforms import FileField, HiddenField, SelectField, StringField, TextAreaField
 from wtforms.validators import InputRequired, length
 
+from app.oscal.component import ComponentTypeEnum
 from app.oscal.validator import OscalValidator
 
 
-def validate_catalog_file(form, field) -> OscalValidator:
+def validate_component_file(form, field) -> OscalValidator:
     validate = OscalValidator(field.data, "oscal_catalog_schema.json")
     field.data.seek(0)
     return validate
 
 
-class CatalogForm(FlaskForm):
+class ComponentForm(FlaskForm):
     title = StringField(
-        "Catalog Name",
+        "Component Name",
         validators=[InputRequired()],
         render_kw={
-            "type": "text",
             "required": "required",
-        },
-    )
-    description = TextAreaField(
-        "Description",
-        validators=[length(max=200)],
-        render_kw={
-            "required": "required",
-            "placeholder": "Enter a short description, 200 characters or less",
-        },
-    )
-    source = StringField(
-        "Source",
-        validators=[length(max=150)],
-        render_kw={
-            "required": "required",
-            "placeholder": "Enter the source URL for this catalog.",
-        },
-    )
-    catalog_file = FileField(
-        "Upload File",
-        validators=[InputRequired(), validate_catalog_file],
-        render_kw={
-            "type": "file",
-            "required": "required",
-        },
-    )
-
-
-class UpdateCatalogForm(FlaskForm):
-    title = StringField(
-        "Catalog Name",
-        validators=[InputRequired()],
-        render_kw={
-            "class": "input",
-            "type": "text",
         },
     )
     description = TextAreaField(
         "Description",
         validators=[InputRequired(), length(max=200)],
         render_kw={
-            "class": "textarea",
+            "required": "required",
             "placeholder": "Enter a short description, 200 characters or less",
         },
     )
-    source = StringField(
-        "Source",
-        validators=[InputRequired(), length(max=150)],
+    component_type = SelectField(
+        "Component Type",
+        choices=[(v.name, v.value) for v in ComponentTypeEnum],
+        default=ComponentTypeEnum.software.value,
+    )
+    component_file = FileField(
+        "Upload File",
+        validators=[validate_component_file],
         render_kw={
-            "placeholder": "Enter the source URL for this catalog.",
+            "type": "file",
         },
+    )
+
+
+class UpdateComponentForm(FlaskForm):
+    name = StringField(
+        "Catalog Name",
+        validators=[InputRequired()],
+    )
+    description = TextAreaField(
+        "Description",
+        validators=[InputRequired(), length(max=200)],
+        render_kw={
+            "placeholder": "Enter a short description, 200 characters or less",
+        },
+    )
+
+
+class ComponentAddForm(FlaskForm):
+    component_id = HiddenField(
+        validators=[InputRequired()],
+        render_kw={"id": "add-component"},
     )

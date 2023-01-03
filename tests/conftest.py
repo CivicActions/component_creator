@@ -2,13 +2,13 @@ import pytest
 
 from app import create_app
 from app.extensions import db
-from app.models.components import Catalog
+from app.models.components import CatalogFile
 from config import TestConfig
 
 
 @pytest.fixture(scope="module")
 def catalog():
-    catalog = Catalog(
+    catalog = CatalogFile(
         title="Test Catalog",
         description="This is the description",
         filename="tests/data/NIST_SP_800-53_rev5_TEST.json",
@@ -39,12 +39,12 @@ def init_database():
     db.create_all()
 
     # Insert user data
-    catalog1 = Catalog(
+    catalog1 = CatalogFile(
         title="Test Catalog",
         description="This is the description",
         filename="tests/data/NIST_SP_800-53_rev5_TEST.json",
     )
-    catalog2 = Catalog(
+    catalog2 = CatalogFile(
         title="Test Catalog Too",
         description="This is another description",
         filename="tests/data/NIST_SP_800-53_rev5_TEST.json",

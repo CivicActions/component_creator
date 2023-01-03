@@ -1,5 +1,6 @@
 @import "https://unpkg.com/@picocss/pico@latest/css/pico.min.css";
 
+
 body > header,
 body > footer,
 body > main {
@@ -37,11 +38,17 @@ a.update-link {
   margin-top: 2em;
 }
 
+a.right-link {
+  float: right;
+  margin-right: 1em;
+}
+
 h1.logo {
   font-size: 1.5rem;
   margin-bottom: 0px;
 }
 
+article.component,
 article.home {
   header {
     padding: 1em;
@@ -52,6 +59,29 @@ article.home {
   footer {
     padding: 1em;
   }
+}
+
+article.flash {
+  text-align: center;
+  font-weight: bold;
+  padding: 1em;
+  border: solid 1px #dbdbdb;
+  &.error {
+    background-color: hsl(347, 90%, 96%);
+  }
+  &.info {
+    background-color: hsl(206, 70%, 96%);
+  }
+  &.message {
+    background-color: hsl(142, 52%, 96%);
+  }
+  &.warning {
+    background-color: hsl(48, 100%, 96%);
+  }
+}
+
+.required {
+  color: #e53935;
 }
 
 .desc-0 {

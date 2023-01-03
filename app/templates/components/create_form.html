@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}Add a Catalog{% endblock %}
+
+{% block breadcrumbs %}
+<nav class="breadcrumb has-arrow-separator m-4" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href={{ url_for("components.components_list") }}>Components</a></li>
+    <li class="is-active"><a href="#" aria-current="page">Add Component</a></li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+    <h1 class="title">Component</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        {% if form.csrf_token.errors %}
+            <div class="warning">You have submitted an invalid CSRF token</div>
+        {% endif %}
+        <label class="label">{{ form.title.label.text }} <span class="required">*</span>
+            {{ form.title }}
+        </label>
+
+        <label class="label">{{ form.description.label.text }} <span class="required">*</span>
+            {{ form.description }}
+        </label>
+
+        <label class="label">{{ form.component_type.label.text }} <span class="required">*</span>
+            {{ form.component_type }}
+        </label>
+
+        <label class="file-label">{{ form.component_file.label.text }}
+            {{ form.component_file }}
+        </label>
+
+        <button type="submit">Submit</button>
+        <button class="secondary outline">Cancel</button>
+    </form>
+{% endblock %}

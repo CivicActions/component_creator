@@ -10,7 +10,7 @@ from app.main import bp
 def index():
     catalogs = catalog_block()
     return render_template(
-        "home.html",
+        "main/home.html",
         content="",
         catalogs=catalogs,
         components={},
@@ -21,7 +21,7 @@ def index():
 def about():
     text = "This is the About page."
     return render_template(
-        "page.html",
+        "main/page.html",
         content=text,
         title="About",
     )

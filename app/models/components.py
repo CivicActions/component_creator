@@ -1,57 +1,54 @@
-import enum
+from flask import current_app, flash
 
 from app.extensions import Base, db
+from app.oscal.component import ComponentModel, ComponentTypeEnum
 
-catalogs = db.Table(
-    "catalogs",
-    db.Column("catalog_id", db.Integer, db.ForeignKey("catalog.id"), primary_key=True),
+component_catalog = db.Table(
+    "component_catalog",
     db.Column(
-        "component_id", db.Integer, db.ForeignKey("component.id"), primary_key=True
+        "component_id", db.Integer, db.ForeignKey("components.id"), primary_key=True
     ),
+    db.Column("catalog_id", db.Integer, db.ForeignKey("catalogs.id"), primary_key=True),
 )
 
 
-class TypesEnum(enum.Enum):
-    INTERCONNECT = "interconnection", "Interconnection"
-    SOFTWARE = "software", "Software"
-    HARDWARE = "hardware", "Hardware"
-    SERVICE = "service", "Service"
-    POLICY = "policy", "Policy"
-    PHYSICAL = "physical", "Physical"
-    PROCESS = "process-procedure", "Process/Procedure"
-    PLAN = "plan", "Plan"
-    GUIDANCE = "guidance", "Guidance"
-    STANDARD = "standard", "Standard"
-    VALIDATION = "validation", "Validation"
-
-
-class Catalog(Base):
-    __tablename__ = "catalog"
+class CatalogFile(Base):
+    __tablename__ = "catalogs"
 
     title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.Text, nullable=False)
+    source = db.Column(db.String(150), nullable=False)
     filename = db.Column(db.String(150), nullable=False)
 
     def __repr__(self):
-        return f"<Catalog '{self.title}'"
+        return self.title
 
 
-class Component(Base):
-    __tablename__ = "component"
+class ComponentFile(Base):
+    __tablename__ = "components"
 
     title = db.Column(db.String(150), nullable=False)
+    description = db.Column(db.Text, nullable=False)
     type = db.Column(
-        db.Enum(TypesEnum),
+        db.Enum(ComponentTypeEnum),
         nullable=False,
-        default=TypesEnum.SOFTWARE.value,
+        default=ComponentTypeEnum.software.name,
     )
     filename = db.Column(db.String(150), nullable=False)
-    catalog = db.relationship(
-        "Catalog",
-        secondary=catalogs,
-        lazy="subquery",
-        backref=db.backref("components", lazy=True),
+    catalogs = db.relationship(
+        "CatalogFile",
+        secondary=component_catalog,
+        backref="components",
     )
 
     def __repr__(self):
-        return f"<Component '{self.title}'"
+        return self.title
+
+    def write_file(self, component: ComponentModel):
+        json_file = component.json(indent=2)
+        try:
+            with open(self.filename, "w+") as f:
+                f.write(json_file)
+        except IOError as exc:
+            flash("Error writing Component file.", "error")
+            current_app.logger(f"Error writing file {self.filename}: {exc}")

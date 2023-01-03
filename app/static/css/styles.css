@@ -36,19 +36,50 @@ a.update-link {
   margin-top: 2em;
 }
 
+a.right-link {
+  float: right;
+  margin-right: 1em;
+}
+
 h1.logo {
   font-size: 1.5rem;
   margin-bottom: 0px;
 }
 
+article.component header,
 article.home header {
   padding: 1em;
 }
+article.component header h3,
 article.home header h3 {
   margin: 0px;
 }
+article.component footer,
 article.home footer {
   padding: 1em;
+}
+
+article.flash {
+  text-align: center;
+  font-weight: bold;
+  padding: 1em;
+  border: solid 1px #dbdbdb;
+}
+article.flash.error {
+  background-color: hsl(347deg, 90%, 96%);
+}
+article.flash.info {
+  background-color: hsl(206deg, 70%, 96%);
+}
+article.flash.message {
+  background-color: hsl(142deg, 52%, 96%);
+}
+article.flash.warning {
+  background-color: hsl(48deg, 100%, 96%);
+}
+
+.required {
+  color: #e53935;
 }
 
 .desc-0 {
