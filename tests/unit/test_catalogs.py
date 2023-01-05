@@ -1,4 +1,4 @@
-from app.catalogs.routes import allowed_file, get_control_links, replace_odps
+from app.catalogs.routes import get_control_links, replace_odps
 from app.oscal.catalog import CatalogModel
 
 
@@ -11,18 +11,6 @@ def test_new_catalog(catalog):
     assert catalog.title == "Test Catalog"
     assert catalog.description == "This is the description"
     assert catalog.filename == "tests/data/NIST_SP_800-53_rev5_TEST.json"
-
-
-def test_allowed_file():
-    """
-    allowed_file only allows json filenames
-    """
-    json_file = allowed_file("TEST_Catalog.json")
-    txt_file = allowed_file("TEST_Catalog.txt")
-    csv_file = allowed_file("TEST_Catalog.csv")
-    assert json_file is True
-    assert txt_file is False
-    assert csv_file is False
 
 
 def test_get_control_links(catalog):

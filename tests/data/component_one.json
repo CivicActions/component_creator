@@ -1,0 +1,88 @@
+{
+  "component_definition": {
+    "uuid": "11a8e8d0-a30c-4ec4-a67e-5feb934a4745",
+    "metadata": {
+      "title": "Test Component One",
+      "published": "2023-01-02T20:45:56.496704+00:00",
+      "last_modified": "2023-01-02T20:45:56.496709+00:00",
+      "version": "0.0.1",
+      "oscal_version": "1.0.0",
+      "revisions": null,
+      "document_ids": null,
+      "props": null,
+      "links": null,
+      "roles": null,
+      "locations": null,
+      "parties": null,
+      "responsible_parties": null,
+      "remarks": null
+    },
+    "components": [
+      {
+        "uuid": "24a707c0-a56e-4e71-a5f8-cddcf3d7e642",
+        "type": "software",
+        "title": "Test Component One",
+        "description": "Test Component One address controls",
+        "purpose": null,
+        "props": null,
+        "links": null,
+        "responsible_roles": null,
+        "protocols": null,
+        "control_implementations": [
+          {
+            "uuid": "291fefb4-8028-4cfc-b06f-898500395f7f",
+            "source": "https://pages.nist.gov/OSCAL/",
+            "description": "NIST 800-53rev5 LOW",
+            "props": null,
+            "links": null,
+            "implemented_requirements": [
+              {
+                "uuid": "9afcf6b6-ae0b-464d-bbd0-284c7c06baac",
+                "control_id": "cp-1",
+                "description": "TC1 addresses cp-1",
+                "props": null,
+                "links": null,
+                "set_parameters": null,
+                "responsible_roles": null,
+                "remarks": null
+              },
+              {
+                "uuid": "41953478-0692-41ea-a2be-4287d55071da",
+                "control_id": "ca-1",
+                "description": "TC1 addresses ca-1",
+                "props": null,
+                "links": null,
+                "set_parameters": null,
+                "responsible_roles": null,
+                "remarks": null
+              },
+              {
+                "uuid": "ed3409c9-8b57-444c-8c69-077528902c38",
+                "control_id": "ac-2",
+                "description": "TC1 addresses ac-2",
+                "props": null,
+                "links": null,
+                "set_parameters": null,
+                "responsible_roles": null,
+                "remarks": null
+              },
+              {
+                "uuid": "e7abe6d3-69af-497a-95f9-89c95abe19f4",
+                "control_id": "au-1",
+                "description": "Add Control narrative",
+                "props": null,
+                "links": null,
+                "set_parameters": null,
+                "responsible_roles": null,
+                "remarks": null
+              }
+            ]
+          }
+        ],
+        "remarks": null
+      }
+    ],
+    "back_matter": null,
+    "import_component_definitions": null
+  }
+}

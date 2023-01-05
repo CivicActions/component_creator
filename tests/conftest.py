@@ -2,7 +2,7 @@ import pytest
 
 from app import create_app
 from app.extensions import db
-from app.models.components import CatalogFile
+from app.models.components import CatalogFile, ComponentFile
 from config import TestConfig
 
 
@@ -11,9 +11,20 @@ def catalog():
     catalog = CatalogFile(
         title="Test Catalog",
         description="This is the description",
+        source="https://pages.nist.gov/OSCAL/",
         filename="tests/data/NIST_SP_800-53_rev5_TEST.json",
     )
     return catalog
+
+
+@pytest.fixture(scope="module")
+def component():
+    component = ComponentFile(
+        title="Testing Component",
+        description="This is the description",
+        type="software",
+    )
+    return component
 
 
 @pytest.fixture(scope="module")
@@ -38,19 +49,35 @@ def init_database():
     # Create the database and the database table
     db.create_all()
 
-    # Insert user data
-    catalog1 = CatalogFile(
-        title="Test Catalog",
-        description="This is the description",
-        filename="tests/data/NIST_SP_800-53_rev5_TEST.json",
+    # Insert data
+    db.session.add_all(
+        [
+            CatalogFile(
+                title="Test Catalog",
+                description="This is the description",
+                source="https://pages.nist.gov/OSCAL/",
+                filename="tests/data/NIST_SP_800-53_rev5_TEST.json",
+            ),
+            CatalogFile(
+                title="Test Catalog Too",
+                description="This is another description",
+                source="https://pages.nist.gov/OSCAL/2",
+                filename="tests/data/NIST_SP_800-53_rev5_TEST.json",
+            ),
+            ComponentFile(
+                title="Test Component One",
+                description="A Component for testing.",
+                type="software",
+                filename="tests/data/component_one.json",
+            ),
+            ComponentFile(
+                title="Test Component Two",
+                description="A Component for testing as well.",
+                type="software",
+                filename="tests/data/component_two.json",
+            ),
+        ]
     )
-    catalog2 = CatalogFile(
-        title="Test Catalog Too",
-        description="This is another description",
-        filename="tests/data/NIST_SP_800-53_rev5_TEST.json",
-    )
-    db.session.add(catalog1)
-    db.session.add(catalog2)
 
     # Commit the changes for the users
     db.session.commit()
