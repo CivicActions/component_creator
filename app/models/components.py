@@ -17,7 +17,7 @@ class CatalogFile(Base):
 
     title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    source = db.Column(db.String(150), nullable=False)
+    source = db.Column(db.String(264), nullable=False)
     filename = db.Column(db.String(150), nullable=False)
 
     def __repr__(self):

@@ -7,15 +7,10 @@ from werkzeug.utils import secure_filename
 from app.catalogs import bp
 from app.catalogs.forms import CatalogForm, UpdateCatalogForm
 from app.extensions import db
+from app.helpers import allowed_file
 from app.models.components import CatalogFile
 from app.oscal.catalog import CatalogModel
 from app.oscal.oscal import BackMatter
-
-ALLOWED_EXTENSIONS = {"json"}
-
-
-def allowed_file(filename: str) -> bool:
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def get_control_links(links: list, backmatter: BackMatter) -> dict:

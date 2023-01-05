@@ -18,6 +18,7 @@ from werkzeug.utils import secure_filename
 from app.components import bp
 from app.components.forms import ComponentForm
 from app.extensions import db
+from app.helpers import allowed_file
 from app.models.components import CatalogFile, ComponentFile
 from app.oscal.catalog import CatalogModel
 from app.oscal.component import (
@@ -28,12 +29,6 @@ from app.oscal.component import (
     ImplementedRequirement,
     Metadata,
 )
-
-ALLOWED_EXTENSIONS = {"json"}
-
-
-def allowed_file(filename: str) -> bool:
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def component_create_file(component_file: ComponentFile):

@@ -29,6 +29,7 @@ class TestConfig:
         INSTANCE_PATH, "testing.db"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    UPLOAD_FOLDER = os.path.join(basedir, "tests/data")
     # Enable the TESTING flag to disable the error catching during request handling
     # so that you get better error reports when performing test requests against the application.
     TESTING = True
